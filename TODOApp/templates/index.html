@@ -1,0 +1,68 @@
+{% extends 'home.html' %}
+{% block content %}
+
+<div class="container pt-4">
+    <div class="row p-0 mt-4">
+        <div class="col-lg-4 p-0 shadow mx-auto border">
+            <div class="alert alert-info">
+                <h2>Add New TODO</h2>
+            </div>
+            <div class="p-4">
+                <form action="/add-todo/" method="post">
+                    {% csrf_token%}
+                    {{form.as_p}}
+                    <hr>
+                    <input type="submit" value="Add" class="btn btn-info">
+                </form>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="border">
+                {% if todos|length == 0 %}
+                <div class="alert alert-info">
+                    <p class="text-center">No Todos</p>
+                </div>
+                {% else%}
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>SNo</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Action</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for todo in todos%}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{todo.title}}</td>
+                            <td>{{todo.status}}</td>
+                            <td>{{todo.priority}}</td>
+                            <td>
+                                <a href="/delete-todo/{{todo.id}}" title="Delete" >🗑️</a>
+                                {% if todo.status == 'p' %}
+
+
+                                <a href="/change-status/{{todo.id}}/P" title="Mark Pending" >⏰</a>
+                                {% else %}
+                                 <a href="/change-status/{{todo.id}}/C" title="Mark Completed" >✅</a>
+                                {% endif%}
+                            </td>
+                        </tr>
+                        {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif%}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock%}
